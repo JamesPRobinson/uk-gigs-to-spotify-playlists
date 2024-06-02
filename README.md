@@ -54,6 +54,7 @@ An SQLite3 database keeps track of tracks with the schemas:
 I've been running this as a CRON job on a raspberry pi with the idea that it is semi-autonomous (there's a need to refresh credentials from time-to-time, but this could also be automated) with tracks being added and then removed again when out-of-date. Streaming could be an option instead of CRON here.
 
 See it in action here:
+
 [London- January](https://open.spotify.com/playlist/4dFqEUoM7R2wLTdGWyuBoX)
 
 [London- February](https://open.spotify.com/playlist/4dSkh4PmnEa5cR6739BbxR)
