@@ -1,0 +1,103 @@
+[
+    {
+        "greater": "Southern England",
+        "id": "LON",
+        "name": "London",
+        "postcode": "SW1V 1AA"
+    },
+    {
+        "id": "CF",
+        "name": "Cardiff",
+        "postcode": "CF14 1EQ"
+    },
+    {
+        "greater": "Southern England",
+        "id": "LC",
+        "name": "Leicester",
+        "postcode": "LE1 9BG"
+    },
+    {
+        "greater": "Northern England",
+        "id": "LP",
+        "name": "Liverpool",
+        "postcode": "L1 0DH"
+    },
+    {
+        "greater": "Northern England",
+        "id": "MN",
+        "name": "Manchester",
+        "postcode": "M13 9PL"
+    },
+    {
+        "greater": "Scotland",
+        "id": "IV",
+        "name": "Inverness",
+        "postcode": "IV1 1RY"
+    },
+    {
+        "greater": "Northern England",
+        "id": "NC",
+        "name": "Newcastle upon Tyne",
+        "postcode": "NE2 4NQ"
+    },
+    {
+        "greater": "Northern Ireland",
+        "id": "BF",
+        "name": "Belfast",
+        "postcode": "BT1 1EA"
+    },
+    {
+        "greater": "Southern England",
+        "id": "PL",
+        "name": "Plymouth",
+        "postcode": "PL1 1HZ"
+    },
+    {
+        "greater": "Scotland",
+        "id": "ES",
+        "name": "Edinburgh",
+        "postcode": "EH1 1EW"
+    },
+    {
+        "greater": "Southern England",
+        "id": "MK",
+        "name": "Milton Keynes",
+        "postcode": "MK9 1AL"
+    },
+    {
+        "greater": "Southern England",
+        "id": "BT",
+        "name": "Brighton",
+        "postcode": "BN1 2FU"
+    },
+    {
+        "greater": "Northern England",
+        "id": "LD",
+        "name": "Leeds",
+        "postcode": "LS1 1JF"
+    },
+    {
+        "greater": "Northern England",
+        "id": "SF",
+        "name": "Sheffield",
+        "postcode": "S1 1AD"
+    },
+    {
+        "greater": "Southern England",
+        "id": "BM",
+        "name": "Birmingham",
+        "postcode": "B5 4BU"
+    },
+    {
+        "greater": "Southern England",
+        "id": "BR",
+        "name": "Bristol",
+        "postcode": "BS1 5TL"
+    },
+    {
+        "greater": "Scotland",
+        "id": "GG",
+        "name": "Glasgow",
+        "postcode": "G1 1BL"
+    }
+]
