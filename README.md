@@ -10,14 +10,26 @@ The end result are playlists with the pattern `{location}-{month}`.
 An SQLite3 database keeps track of tracks with the schema:
 
 ## Requirements
-- Create a `.env` file with the following credentials:
-  - SPOTIFY_CLIENT_ID [api docs](https://developer.spotify.com/documentation/web-api)
-  - SPOTIFY_CLIENT_SECRET
-  - REFRESH_TOKEN - [see more info](https://developer.spotify.com/documentation/web-api/tutorials/refreshing-tokens)
-  - ENTS_ACCESS_TOKEN - [api docs](https://developers.ents24.com/api-reference)
-- Run npm i to install packages
+- Spotify API credentials
+- Ents24 API credentials
+- Save credentials at root of project as `config.json` with structure:
+``` json
+{
+    "ents": {
+        "access_token": "", # https://developers.ents24.com/api-reference
+        "client_id": "",
+        "client_secret": ""
+    },
+    "spotify": {
+        "client_id": "", # https://developer.spotify.com/documentation/web-api
+        "client_secret": "",
+        "refresh_token": "" # https://developer.spotify.com/documentation/web-api/tutorials/refreshing-tokens
+    }
+}
+```
+- `npm i` to install packages
 - Create a file called db/gigs_playlist.db
-- Run the `bootstrap/` scripts
+- `npm run bootstrap` to create the tables and spotify playlists
 
 ## Schemas
 ### `event_track` Table Schema
@@ -56,26 +68,6 @@ An SQLite3 database keeps track of tracks with the schema:
 #### Constraints
 
 - unique_name_month_postcode: Ensures that the combination of month, name, and postcode is unique.
-
-
-## Requirements
-- Spotify API credentials
-- Ents24 API credentials
-- Save credentials at root of project as `config.json` with structure:
-``` json
-{
-    "ents": {
-        "access_token": "",
-        "client_id": "",
-        "client_secret": ""
-    },
-    "spotify": {
-        "client_id": "",
-        "client_secret": "",
-        "refresh_token": ""
-    }
-}
-```
 
 ## Implementation
 I've been running this as a CRON job on a raspberry pi with the idea that it is semi-autonomous (there's a need to refresh credentials from time-to-time, but this could also be automated) with tracks being added and then removed again when out-of-date. Streaming could be an option instead of CRON here.
