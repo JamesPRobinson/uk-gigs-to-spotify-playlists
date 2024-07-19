@@ -1,73 +1,21 @@
-require('dotenv').config()
-const axios = require('axios')
 const ents = require('./ents/listings')
-const SpotifyWebApi = require('spotify-web-api-node')
-const sqlite3 = require('sqlite3')
 const tools = require('./tools')
-const winston = require('winston')
 
 const database_file = './db/gig_playlists.db'
-var db = new sqlite3.Database(
-  database_file,
-  sqlite3.OPEN_CREATE | sqlite3.OPEN_READWRITE,
-  err => {
-    if (err) {
-      console.log('Getting error ' + err)
-    }
-  }
-)
+const db = tools.getSqlLiteDB(database_file)
+const logger = tools.getLogger('add_tracks')
 
-const logger = winston.createLogger({
-  format: winston.format.combine(
-    winston.format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss'
-    }),
-    winston.format.printf(
-      info =>
-        `${info.timestamp} ${info.level}: ${info.message}` +
-        (info.splat !== undefined ? `${info.splat}` : ' ')
-    )
-  ),
-  transports: [
-    //
-    // - Write all logs to `combined.log`
-    //
-    new winston.transports.File({
-      filename: 'add_tracks.log',
-      maxFiles: 1,
-      maxsize: 10000
-    })
-  ]
-})
-
-const axios_client = axios.create({
-  baseURL: 'https://api.ents24.com/',
-  timeout: 10000,
-  headers: {
-    Authorization: process.env.ENTS_ACCESS_TOKEN
-  }
-})
-
-var client_id = process.env.SPOTIFY_CLIENT_ID
-var client_secret = process.env.SPOTIFY_CLIENT_SECRET
-
-var spotifyApi = new SpotifyWebApi({
-  clientId: client_id,
-  clientSecret: client_secret
-})
-
-spotifyApi.setRefreshToken(process.env.REFRESH_TOKEN)
 
 async function get_gigs_ents24 () {
+  const axios_client = await tools.createEntsClient();
   const today = new Date()
   var month_city_playlists = await new Promise((resolve, reject) => {
     db.all('select * from uk_city_playlist', [], (err, rows) => {
       if (err) reject(err)
       resolve(rows)
     })
-  })
+  });
   for (const month_city of month_city_playlists) {
-    var area_name = month_city.name
     var postcode = month_city.postcode
     var month_index = tools.getMonthNumber(month_city.month)
 
@@ -94,18 +42,20 @@ async function get_gigs_ents24 () {
     }
     for (const day of days) {
       logger.info(`Processing gigs from ents on ${day} in ${postcode}.`)
-      var gigs = await ents.getListings(axios_client, day, postcode)
+      var gigs = await ents.getListings(axios_client, day, postcode);
+      console.log(gigs);
       if (gigs?.length > 0) {
         let gig_date = tools.formatDate(today)
         // each day has its own metadata. crush into one to get all artist names that appear in that month's playlist.
-        await gigs_to_spotify_track(gigs, month_city, gig_date)
+        //await gigs_to_spotify_track(gigs, month_city, gig_date)
       }
     }
   }
 }
 
 async function gigs_to_spotify_track (gigs, month_city, gig_date) {
-  spotifyApi = await refresh_token()
+  var spotifyApi = await tools.getSpotifyAPI()
+  spotifyApi = await tools.refreshSpotifyToken(spotifyApi)
   // don't want same artist showing up multiple times in one playlist.
   var song_uris = []
   for (const gig of gigs) {
@@ -118,8 +68,7 @@ async function gigs_to_spotify_track (gigs, month_city, gig_date) {
           }
         },
         function (err) {
-          logger.error(`error getting tracks for ${gig.headline}`)
-          logger.error(err.toString())
+          logger.error(`error getting tracks for ${gig.headline}`, err);
         }
       )
       var top_song = false
@@ -182,20 +131,4 @@ async function gigs_to_spotify_track (gigs, month_city, gig_date) {
     )
   }
 }
-
-async function refresh_token () {
-  await spotifyApi.refreshAccessToken().then(
-    function (data) {
-      logger.debug('The access token has been refreshed!')
-
-      // Save the access token so that it's used in future calls
-      spotifyApi.setAccessToken(data.body['access_token'])
-    },
-    function (err) {
-      logger.error('Could not refresh access token', err)
-    }
-  )
-  return spotifyApi
-}
-
-get_gigs_ents24()
+get_gigs_ents24();

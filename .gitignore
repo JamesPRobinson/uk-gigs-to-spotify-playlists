@@ -131,3 +131,4 @@ dist
 **.sh
 helpers/playlist_links.md
 **.db
+config.json

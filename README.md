@@ -7,7 +7,7 @@ ENTS24 API is hit with today's date and a postcode. These postcodes are taken by
 
 The end result are playlists with the pattern `{location}-{month}`.
 
-An SQLite3 database keeps track of tracks with the schemas:
+An SQLite3 database keeps track of tracks with the schema:
 
 ## Requirements
 - Create a `.env` file with the following credentials:
@@ -35,7 +35,7 @@ An SQLite3 database keeps track of tracks with the schemas:
 | `track_uri`                           | TEXT      | NOT NULL                                                                    |
 | `web_link`                            | TEXT      |                                                                             |
 | `venue_name`                          | TEXT      | NOT NULL                                                                    |
-| `unique_track_artist_in_month_playlist` |           | UNIQUE (`artist_name`, `track_uri`, `uk_city_playlist_id`, `venue_name`)  |
+| `unique_track_artist_in_month_playlist` |           | UNIQUE (`artist_name`, `uk_city_playlist_id`, `venue_name`)  |
 
 #### Constraints
 
@@ -56,6 +56,26 @@ An SQLite3 database keeps track of tracks with the schemas:
 #### Constraints
 
 - unique_name_month_postcode: Ensures that the combination of month, name, and postcode is unique.
+
+
+## Requirements
+- Spotify API credentials
+- Ents24 API credentials
+- Save credentials at root of project as `config.json` with structure:
+``` json
+{
+    "ents": {
+        "access_token": "",
+        "client_id": "",
+        "client_secret": ""
+    },
+    "spotify": {
+        "client_id": "",
+        "client_secret": "",
+        "refresh_token": ""
+    }
+}
+```
 
 ## Implementation
 I've been running this as a CRON job on a raspberry pi with the idea that it is semi-autonomous (there's a need to refresh credentials from time-to-time, but this could also be automated) with tracks being added and then removed again when out-of-date. Streaming could be an option instead of CRON here.

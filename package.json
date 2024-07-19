@@ -8,5 +8,11 @@
         "spotify-web-api-node": "^5.0.2",
         "sqlite3": "^5.1.6",
         "winston": "^3.11.0"
+    },
+    "scripts": {
+        "add": "node add_tracks.js",
+        "bootstrap": "node bootstrap/create_event_track_tables.js && node bootstrap/create_playlists_tables.js",
+        "remove": "node remove_tracks.js",
+        "teardown": "node helpers/teardown_spotify.js"
     }
 }
