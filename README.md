@@ -1,13 +1,26 @@
 # uk-gigs-to-spotify-playlists
+
+## Overview
 Create spotify playlists from events listings.
 
 ENTS24 API is hit with today's date and a postcode. These postcodes are taken by hand as a rough approx. of each city centre. Those listings are then taken to the Spotify API search function, the first song found by the artist is then added to that months' playlist.
 
 The end result are playlists with the pattern `{location}-{month}`.
 
-An SQLite3 database keeps track of tracks with the schemas:
+An SQLite3 database keeps track of tracks with the schema:
 
-## `event_track` Table Schema
+## Requirements
+- Create a `.env` file with the following credentials:
+  - SPOTIFY_CLIENT_ID [api docs](https://developer.spotify.com/documentation/web-api)
+  - SPOTIFY_CLIENT_SECRET
+  - REFRESH_TOKEN - [see more info](https://developer.spotify.com/documentation/web-api/tutorials/refreshing-tokens)
+  - ENTS_ACCESS_TOKEN - [api docs](https://developers.ents24.com/api-reference)
+- Run npm i to install packages
+- Create a file called db/gigs_playlist.db
+- Run the `bootstrap/` scripts
+
+## Schemas
+### `event_track` Table Schema
 
 | Column Name                           | Data Type | Constraints                                                                 |
 |---------------------------------------|-----------|-----------------------------------------------------------------------------|
@@ -24,12 +37,12 @@ An SQLite3 database keeps track of tracks with the schemas:
 | `venue_name`                          | TEXT      | NOT NULL                                                                    |
 | `unique_track_artist_in_month_playlist` |           | UNIQUE (`artist_name`, `uk_city_playlist_id`, `venue_name`)  |
 
-### Constraints
+#### Constraints
 
 - unique_track_artist_in_month_playlist: Ensures that the combination of artist_name, track_uri, uk_city_playlist_id, and venue_name is unique.
 - FOREIGN KEY(uk_city_playlist_id): Establishes a relationship with the uk_city_playlist table.
 
-## `uk_city_playlist` Table Schema
+### `uk_city_playlist` Table Schema
 
 | Column Name                         | Data Type | Constraints                                          |
 |-------------------------------------|-----------|------------------------------------------------------|
@@ -40,7 +53,7 @@ An SQLite3 database keeps track of tracks with the schemas:
 | `postcode`                          | TEXT      | NOT NULL                                             |
 | `unique_name_month_postcode`        |           | UNIQUE (`month`, `name`, `postcode`)                 |
 
-### Constraints
+#### Constraints
 
 - unique_name_month_postcode: Ensures that the combination of month, name, and postcode is unique.
 
@@ -63,7 +76,6 @@ An SQLite3 database keeps track of tracks with the schemas:
     }
 }
 ```
-
 
 ## Implementation
 I've been running this as a CRON job on a raspberry pi with the idea that it is semi-autonomous (there's a need to refresh credentials from time-to-time, but this could also be automated) with tracks being added and then removed again when out-of-date. Streaming could be an option instead of CRON here.
