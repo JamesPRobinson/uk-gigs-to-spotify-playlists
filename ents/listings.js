@@ -1,28 +1,5 @@
 const tools = require('../tools.js')
-const winston = require('winston')
-
-const logger = winston.createLogger({
-  format: winston.format.combine(
-    winston.format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss'
-    }),
-    winston.format.printf(
-      info =>
-        `${info.timestamp} ${info.level}: ${info.message}` +
-        (info.splat !== undefined ? `${info.splat}` : ' ')
-    )
-  ),
-  transports: [
-    //
-    // - Write all logs to `combined.log`
-    //
-    new winston.transports.File({
-      filename: 'ents.log',
-      maxFiles: 1,
-      maxsize: 10000
-    })
-  ]
-})
+const logger = tools.getLogger('ents')
 
 module.exports = {
   getListings: async function (client, day, postcode) {
@@ -48,7 +25,7 @@ module.exports = {
       })
     await tools.sleep(500)
     if (response?.status != 200) {
-      // back-off
+      // back-off and go to next
       await tools.sleep(5000)
       return gigs
     }

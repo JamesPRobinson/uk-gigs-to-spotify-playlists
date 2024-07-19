@@ -22,7 +22,7 @@ An SQLite3 database keeps track of tracks with the schemas:
 | `track_uri`                           | TEXT      | NOT NULL                                                                    |
 | `web_link`                            | TEXT      |                                                                             |
 | `venue_name`                          | TEXT      | NOT NULL                                                                    |
-| `unique_track_artist_in_month_playlist` |           | UNIQUE (`artist_name`, `track_uri`, `uk_city_playlist_id`, `venue_name`)  |
+| `unique_track_artist_in_month_playlist` |           | UNIQUE (`artist_name`, `uk_city_playlist_id`, `venue_name`)  |
 
 ### Constraints
 
@@ -48,6 +48,21 @@ An SQLite3 database keeps track of tracks with the schemas:
 ## Requirements
 - Spotify API credentials
 - Ents24 API credentials
+- Save credentials at root of project as `config.json` with structure:
+``` json
+{
+    "ents": {
+        "access_token": "",
+        "client_id": "",
+        "client_secret": ""
+    },
+    "spotify": {
+        "client_id": "",
+        "client_secret": "",
+        "refresh_token": ""
+    }
+}
+```
 
 
 ## Implementation
