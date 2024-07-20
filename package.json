@@ -4,7 +4,6 @@
     "description": "Create spotify playlists from events listings.",
     "dependencies": {
         "axios": "^1.2.2",
-        "dotenv": "^16.0.3",
         "spotify-web-api-node": "^5.0.2",
         "sqlite3": "^5.1.6",
         "winston": "^3.11.0"
